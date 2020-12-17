@@ -50,11 +50,44 @@ namespace SmartSchool.API.Controllers
             return Ok(Professores);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            //var professor = Professor.FirstOrDefault(p == p.Id == id)
-            return Ok(Professores);
+            var professor = Professores.FirstOrDefault(p => p.Id == id);
+            if (professor == null) return BadRequest("O professor não foi encontrado");
+            return Ok(professor);
+        }
+
+        [HttpGet("{nome}")]
+        public IActionResult GetByName (string nome)
+        {
+            var professor = Professores.FirstOrDefault(p => p.Nome.Contains(nome));
+            if (professor == null) return BadRequest("O professor não foi encontrado");
+            return Ok(professor);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Professor professor)
+        {
+            return Ok(professor);
+        }
+
+        [HttpPut("{id:int}")]
+        public IActionResult Put(int id, Professor professor)
+        {
+            return Ok(professor);
+        }
+
+        [HttpPatch("{id:int}")]
+        public IActionResult Patch(int id, Professor professor)
+        {
+            return Ok(professor);
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            return Ok();
         }
     }
 }
