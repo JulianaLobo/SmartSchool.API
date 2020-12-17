@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartSchool.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SmartSchool.API.Controllers
 {
@@ -12,36 +12,63 @@ namespace SmartSchool.API.Controllers
     [ApiController]
     public class AlunoController : ControllerBase
     {
-        // GET: api/<AlunoController>
+        public List<Aluno> Alunos = new List<Aluno>()
+        {
+            new Aluno()
+            {
+                
+
+            },
+
+        };
+
+
+        public AlunoController() { }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(Alunos);
         }
 
-        // GET api/<AlunoController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(int id)
         {
-            return "value";
+            var aluno = Alunos.FirstOrDefault(p => p.Id == id);
+            if (aluno == null) return BadRequest("O aluno não foi encontrado");
+            return Ok(aluno);
         }
 
-        // POST api/<AlunoController>
+        [HttpGet("{nome}")]
+        public IActionResult GetByName(string nome)
+        {
+            var aluno = Alunos.FirstOrDefault(p => p.Nome.Contains(nome));
+            if (aluno == null) return BadRequest("O aluno não foi encontrado");
+            return Ok(aluno);
+        }
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Aluno aluno)
         {
+            return Ok(aluno);
         }
 
-        // PUT api/<AlunoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id:int}")]
+        public IActionResult Put(int id, Aluno aluno)
         {
+            return Ok(aluno);
         }
 
-        // DELETE api/<AlunoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPatch("{id:int}")]
+        public IActionResult Patch(int id, Aluno aluno)
         {
+            return Ok(aluno);
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            return Ok();
         }
     }
 }
