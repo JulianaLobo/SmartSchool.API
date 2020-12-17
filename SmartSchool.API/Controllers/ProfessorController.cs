@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartSchool.API.Data;
 using SmartSchool.API.Models;
 using System;
 using System.Collections.Generic;
@@ -12,48 +13,23 @@ namespace SmartSchool.API.Controllers
     [ApiController]
     public class ProfessorController : ControllerBase
     {
-        public List<Professor> Professores = new List<Professor>()
+        private readonly DataContext _context;
+
+        public ProfessorController(DataContext context)
         {
-            new Professor()
-            {
-                Id = 1,
-                Nome = "Matheus",
-                               
-            },
-
-            new Professor()
-            {
-                Id = 2,
-                Nome = "Julia",
-
-            },
-
-            new Professor()
-            {
-                Id = 3,
-                Nome = "Roberto",
-
-            },
-
-            new Professor()
-            {
-                Id = 4,
-                Nome = "Carla",
-
-            },
-        };
-        public ProfessorController() { }
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Professores);
+            return Ok(_context.Professores);
         }
 
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            var professor = Professores.FirstOrDefault(p => p.Id == id);
+            var professor = _context.Professores.FirstOrDefault(p => p.Id == id);
             if (professor == null) return BadRequest("O professor não foi encontrado");
             return Ok(professor);
         }
@@ -61,7 +37,7 @@ namespace SmartSchool.API.Controllers
         [HttpGet("{nome}")]
         public IActionResult GetByName (string nome)
         {
-            var professor = Professores.FirstOrDefault(p => p.Nome.Contains(nome));
+            var professor = _context.Professores.FirstOrDefault(p => p.Nome.Contains(nome));
             if (professor == null) return BadRequest("O professor não foi encontrado");
             return Ok(professor);
         }

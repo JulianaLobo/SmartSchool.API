@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartSchool.API.Data;
 using SmartSchool.API.Models;
 using System;
 using System.Collections.Generic;
@@ -12,29 +13,25 @@ namespace SmartSchool.API.Controllers
     [ApiController]
     public class AlunoController : ControllerBase
     {
-        public List<Aluno> Alunos = new List<Aluno>()
+        private readonly DataContext _context;
+
+        public AlunoController(DataContext context)
         {
-            new Aluno()
-            {
-                
-
-            },
-
-        };
+            _context = context;
+        }
 
 
-        public AlunoController() { }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Alunos);
+            return Ok(_context.Alunos);
         }
 
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            var aluno = Alunos.FirstOrDefault(p => p.Id == id);
+            var aluno = _context.Alunos.FirstOrDefault(p => p.Id == id);
             if (aluno == null) return BadRequest("O aluno não foi encontrado");
             return Ok(aluno);
         }
@@ -42,7 +39,7 @@ namespace SmartSchool.API.Controllers
         [HttpGet("{nome}")]
         public IActionResult GetByName(string nome)
         {
-            var aluno = Alunos.FirstOrDefault(p => p.Nome.Contains(nome));
+            var aluno = _context.Alunos.FirstOrDefault(p => p.Nome.Contains(nome));
             if (aluno == null) return BadRequest("O aluno não foi encontrado");
             return Ok(aluno);
         }
